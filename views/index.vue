@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<topnav></topnav>
+		This is the homepage
 	</div>
 </template>
 
@@ -8,15 +9,7 @@
     export default {
 		data() {
 			return {
-				title: "hello world",
-				isOn: true
 			}
 		}
     }
 </script>
-
-<style>
-	p {
-		color:red;
-	}
-</style>

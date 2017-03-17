@@ -1,6 +1,8 @@
 const express = require('express');
-const expressVue = require('express-vue')
+const expressVue = require('express-vue');
 const router = express.Router();
+
+const styleBulma = {style: 'https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.0/css/bulma.min.css', type: 'text/css', rel: 'stylesheet'};
 
 router.use(function timeLog(req, res, next){
 	console.log('Time: ' + Date.now())
@@ -15,15 +17,53 @@ router.get('/', (req, res) => {
 			head: {
 				title: 'Play Site',
 				meta: [
-					{style: 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', type: 'text/css', rel: 'stylesheet'}
+					styleBulma
 				]
 			},
-			components: ['hello', 'topnav']
+			components: ['topnav']
 		}
-	}
-
+	};
     res.render('index', vueData);
 });
+
+router.get('/signup', (req, res) => {
+	let vueData = {
+		data: {
+			'su-selected': true,
+			'si-selected': false
+		},
+		vue: {
+			head: {
+				title: 'Sign up',
+				meta: [
+					styleBulma
+				]
+			},
+			components: ['topnav', 'signupform']
+		}
+	};
+	res.render('signup', vueData);
+});
+
+router.get('/signin', (req, res) => {
+	let vueData = {
+		data: {
+			'su-selected': false,
+			'si-selected': true
+		},
+		vue: {
+			head: {
+				title: 'Sign In',
+				meta: [
+					styleBulma
+				]
+			},
+			components: ['topnav', 'signinform']
+		}
+	};
+	res.render('signup', vueData);
+});
+
 
 // router.get('/hello', (req, res) => {
 // 	res.send("hey");
