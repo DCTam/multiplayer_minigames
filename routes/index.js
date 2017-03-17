@@ -20,49 +20,45 @@ router.get('/', (req, res) => {
 					styleBulma
 				]
 			},
-			components: ['topnav']
+			components: ['topnav', 'signupform', 'signinform']
 		}
 	};
     res.render('index', vueData);
 });
 
-router.get('/signup', (req, res) => {
-	let vueData = {
-		data: {
-			'su-selected': true,
-			'si-selected': false
-		},
-		vue: {
-			head: {
-				title: 'Sign up',
-				meta: [
-					styleBulma
-				]
-			},
-			components: ['topnav', 'signupform']
-		}
-	};
-	res.render('signup', vueData);
-});
+// router.get('/signup', (req, res) => {
+// 	let vueData = {
+// 		data: {
+// 		},
+// 		vue: {
+// 			head: {
+// 				title: 'Sign up',
+// 				meta: [
+// 					styleBulma
+// 				]
+// 			},
+// 			components: ['topnav', 'signupform']
+// 		}
+// 	};
+// 	res.render('signup', vueData);
+// });
 
-router.get('/signin', (req, res) => {
-	let vueData = {
-		data: {
-			'su-selected': false,
-			'si-selected': true
-		},
-		vue: {
-			head: {
-				title: 'Sign In',
-				meta: [
-					styleBulma
-				]
-			},
-			components: ['topnav', 'signinform']
-		}
-	};
-	res.render('signup', vueData);
-});
+// router.get('/signin', (req, res) => {
+// 	let vueData = {
+// 		data: {
+// 		},
+// 		vue: {
+// 			head: {
+// 				title: 'Sign In',
+// 				meta: [
+// 					styleBulma
+// 				]
+// 			},
+// 			components: ['topnav', 'signinform']
+// 		}
+// 	};
+// 	res.render('signup', vueData);
+// });
 
 
 // router.get('/hello', (req, res) => {
