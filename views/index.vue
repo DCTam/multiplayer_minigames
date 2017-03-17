@@ -1,7 +1,5 @@
 <template>
 	<div>
-		<button class="btn btn-primary">hey</button>
-		<hello></hello>
 		<topnav></topnav>
 	</div>
 </template>
@@ -18,4 +16,7 @@
 </script>
 
 <style>
+	p {
+		color:red;
+	}
 </style>
