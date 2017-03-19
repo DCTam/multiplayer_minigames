@@ -1,9 +1,7 @@
 <template>
 	<div>
-		<topnav @selected="onSelect($event)"></topnav>
-		<keep-alive>
-			<component :is="selectedComponent"></component>
-		</keep-alive>
+		<topnav :buttons='buttons'></topnav>
+		Home Page
 	</div>
 </template>
 
@@ -11,13 +9,12 @@
     export default {
 		data() {
 			return {
-				selectedComponent: ''
-			}
-		},
-		methods: {
-			onSelect(button){
-				this.selectedComponent = button.su ? 'signupform' : 'signinform';
+				buttons: {
+					su:false,
+					si:false
+				}
 			}
 		}
+		
     }
 </script>

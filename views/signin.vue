@@ -1,19 +1,20 @@
 <template>
 	<div>
 		<topnav :buttons='buttons'></topnav>
-		<signupform :message="message"></signupform>
+		<signinform :message="message"></signinform>
 	</div>
 </template>
 
 <script>
 	export default {
 		data(){
-			return {
-				buttons:{
-					su: true,
-					si: false
+			return{
+				buttons:{				
+					su: false,
+					si: true
 				}
 			}
 		}
+		
 	}
 </script>
