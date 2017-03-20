@@ -26,9 +26,17 @@
 			</div>
 			</div>
 		</nav>
-		<p>{{user._id}}</p>
-		<p>{{user.local.username}}</p>
-		<p>{{user.local.password}}</p>
+
+		<article class="message">
+			<div class="message-header">
+				<p>Account details</p>
+			</div>
+			<div class="message-body">
+				<p><strong>User id: </strong>{{user._id}}</p>
+				<p><strong>Username: </strong>{{user.local.username}}</p>
+				<p><strong>Password: </strong>{{user.local.password}}</p>
+			</div>
+		</article>
 	</div>
 </template>
 

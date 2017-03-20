@@ -15,8 +15,6 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 
 
-
-
 //Database configuration
 const configDB = require('./configs/database.js');
 mongoose.connect(configDB.url);
@@ -54,6 +52,6 @@ app.listen(port, (err, res) => {
 		console.log("ERROR: " + err);
 	}
 	else{
-		console.log('Server running...');
+		console.log('Server running on port ' + port + '...');
 	}
 });
