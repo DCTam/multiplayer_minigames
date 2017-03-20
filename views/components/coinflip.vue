@@ -1,11 +1,9 @@
 <template>
 	<div>
-		you logged in
+		COIN FLIP PAGE
 	</div>
 </template>
 
 <script>
-	export default {
 
-	}
 </script>

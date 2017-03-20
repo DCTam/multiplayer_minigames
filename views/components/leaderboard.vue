@@ -1,11 +1,9 @@
 <template>
 	<div>
-		PROFILE PAGE
+		LEADERBOARD
 	</div>
 </template>
 
 <script>
-	export default {
-		
-	}
+
 </script>

@@ -39,7 +39,7 @@ module.exports = (app, passport, router) => {
 	});
 
 	 router.post('/signin', passport.authenticate('local-login', {
-        successRedirect : '/profile', // redirect to the secure profile section
+        successRedirect : '/homepage', // redirect to the secure profile section
         failureRedirect : '/signin', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
@@ -61,12 +61,12 @@ module.exports = (app, passport, router) => {
 	});
 
 	router.post('/signup', passport.authenticate('local-signup',{
-		successRedirect: '/profile',
+		successRedirect: '/homepage',
 		failureRedirect: '/signup',
 		failureFlash : true
 	}));
 
-	router.get('/profile', isLoggedIn, (req, res) => {
+	router.get('/homepage', isLoggedIn, (req, res) => {
 		let vueData = {
 			data: {
 				user: req.user
@@ -76,24 +76,24 @@ module.exports = (app, passport, router) => {
 					title: 'Homepage',
 					meta: styleArr
 				},
-				components: []
+				components: ['authnav', 'chatroom', 'rps', 'profile', 'coinflip', 'leaderboard']
 			}
 		};
 		console.log(req.user);
-		res.render('profile', vueData);
+		res.render('auth_homepage', vueData);
 	});
 	
 	router.get('/logout', (req, res) => {
-		req.logout();
-		res.directory('/');
+		req.session.destroy((err) => {
+    		res.redirect('/');
+  		});
 	});
+	return router;
+}
 
-	function isLoggedIn(req, res, next){
+function isLoggedIn(req, res, next){
 		if (req.isAuthenticated()){
 			return next();
 		}
 		res.redirect('/');
 	}
-
-	return router;
-}
