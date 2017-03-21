@@ -1,4 +1,4 @@
-//Variable setup
+//Setup
 const express = require('express');
 const expressVue = require('express-vue');
 const path = require('path');
@@ -8,12 +8,15 @@ const mongoose = require('mongoose');
 const app = express();
 const router = express.Router();
 const port = process.env.PORT || 8080;
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
+
+//General middleware
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-
 
 //Database configuration
 const configDB = require('./configs/database.js');
@@ -47,11 +50,15 @@ app.set('vue', {
 const routes = require('./app/routes.js')(app, passport, router);
 app.use('/', routes);
 
-app.listen(port, (err, res) => {
-	if (err){
-		console.log("ERROR: " + err);
-	}
-	else{
-		console.log('Server running on port ' + port + '...');
-	}
-});
+//Socket.io
+require('./app/socket.js')(io);
+
+http.listen(8080);
+// app.listen(port, (err, res) => {
+// 	if (err){
+// 		console.log("ERROR: " + err);
+// 	}
+// 	else{
+// 		console.log('Server running on port ' + port + '...');
+// 	}
+// });

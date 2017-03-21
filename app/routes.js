@@ -34,7 +34,6 @@ module.exports = (app, passport, router) => {
 				components: ['topnav','signinform']
 			}
 		};
-		console.log(req.flash());
 		res.render('signin', vueData);
 	});
 
@@ -70,16 +69,20 @@ module.exports = (app, passport, router) => {
 		let vueData = {
 			data: {
 				user: req.user
-			},
+				},
 			vue: {
 				head: {
 					title: 'Homepage',
-					meta: styleArr
+					meta: [
+					{style: 'https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.0/css/bulma.min.css', type: 'text/css', rel: 'stylesheet'},
+					{style: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', type: 'text/css', rel: 'stylesheet'},
+					{script: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js'}
+					]
 				},
 				components: ['authnav', 'chatroom', 'rps', 'profile', 'coinflip', 'leaderboard']
 			}
 		};
-		console.log(req.user);
+
 		res.render('auth_homepage', vueData);
 	});
 	
@@ -88,6 +91,7 @@ module.exports = (app, passport, router) => {
     		res.redirect('/');
   		});
 	});
+
 	return router;
 }
 

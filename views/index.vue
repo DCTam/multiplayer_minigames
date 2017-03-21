@@ -17,4 +17,8 @@
 		}
 		
     }
+
+	function clickk(){
+		alert('hi');
+	}
 </script>
