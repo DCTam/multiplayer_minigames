@@ -68,8 +68,8 @@ module.exports = (app, passport, router) => {
 	router.get('/homepage', isLoggedIn, (req, res) => {
 		let vueData = {
 			data: {
-				user: req.user
-				},
+				user: req.user.local.username
+			},
 			vue: {
 				head: {
 					title: 'Homepage',
@@ -85,7 +85,7 @@ module.exports = (app, passport, router) => {
 
 		res.render('auth_homepage', vueData);
 	});
-	
+
 	router.get('/logout', (req, res) => {
 		req.session.destroy((err) => {
     		res.redirect('/');

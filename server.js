@@ -11,7 +11,6 @@ const port = process.env.PORT || 8080;
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
-
 //General middleware
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
@@ -53,7 +52,14 @@ app.use('/', routes);
 //Socket.io
 require('./app/socket.js')(io);
 
-http.listen(8080);
+http.listen(port, (err, res) => {
+	if (err){
+		console.log("ERROR: " + err);
+	}
+	else{
+		console.log('Server running on port ' + port + '...');
+	}
+});
 // app.listen(port, (err, res) => {
 // 	if (err){
 // 		console.log("ERROR: " + err);
