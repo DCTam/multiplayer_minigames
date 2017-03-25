@@ -68,7 +68,7 @@ module.exports = (app, passport, router) => {
 	router.get('/homepage', isLoggedIn, (req, res) => {
 		let vueData = {
 			data: {
-				user: req.user.local.username
+				username: req.user.local.username
 			},
 			vue: {
 				head: {

@@ -32,9 +32,7 @@
 				<p>Account details</p>
 			</div>
 			<div class="message-body">
-				<p><strong>User id: </strong>{{user._id}}</p>
-				<p><strong>Username: </strong>{{user.local.username}}</p>
-				<p><strong>Password: </strong>{{user.local.password}}</p>
+				<p><strong>Username: </strong>{{username}}</p>
 			</div>
 		</article>
 	</div>
@@ -42,7 +40,7 @@
 
 <script>
 	export default {
-		props:['user']
+		props:['username']
 	}
 
 </script>

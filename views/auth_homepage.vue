@@ -2,7 +2,7 @@
 	<div>
 		<authnav @selected="selectedComponent = $event"></authnav>
 		<keep-alive>
-			<component :user="user" :is="selectedComponent"></component>
+			<component :username="username" :is="selectedComponent"></component>
 		</keep-alive>
 	</div>
 </template>

@@ -16,7 +16,7 @@
 					
 					<hr>
 					<div class="field is-horizontal" style="position: relative;">
-						<form @submit.prevent="submitMsg(user)">
+						<form @submit.prevent="submitMsg(username)">
 							<input v-model="input" class="input" type="text"autocomplete="off"/>
 							<button type="submit" class="button is-primary">Send</button>
 						</form>
@@ -34,14 +34,19 @@
 				input: '',
 				messages: [],
 				usersConnected: 0,
-				socket: null
+				socket: null,
+				MainChat: 'MainChat'
 			}
 		},
 		mounted() {
 			this.socket = io();
 
+			this.socket.on('connect', () => {
+				this.socket.emit('joinMain', this.MainChat);
+			});
+
 			this.socket.on('push message', (messageObj) => {
-				this.messages.push(messageObj.user + ": " + messageObj.message);
+				this.messages.push(messageObj.username + ": " + messageObj.message);
 				let d = document.getElementById("msgBox");
      			d.scrollTop = d.scrollHeight;
 			});
@@ -52,16 +57,16 @@
 
 		},
 		methods: {
-			submitMsg(user){
+			submitMsg(username){
 				if(this.input == ''){return;}
 				this.socket.emit('chat message', {
-					user: user,
+					username: username,
 					message: this.input
 				});
 				this.input = '';
 			}
 		},
-		props: ['user']
+		props: ['username']
 	}
 	
 </script>
