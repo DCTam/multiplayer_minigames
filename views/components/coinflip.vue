@@ -5,7 +5,7 @@
 				<p class="panel-heading">List of Rooms </p>
 	
 				<div v-for="room in rooms">
-					<a @click="joinRoom(username)" class="panel-block">
+					<a @click="joinRoom(room.roomId, username)" class="panel-block">
 						<span class="panel-icon"><i class="fa fa-user"></i></span>
 						<p>({{room.capacity}}/2) - {{room.roomName}}</p>
 					</a>
@@ -22,15 +22,14 @@
 			<div class="modal-background"></div>
 			<div class="modal-card">
 				<header class="modal-card-head">
-					<p class="modal-card-title">{{}}Hey</p>
-					<button @click="leaveRoom()" class="delete"></button>
+					<p class="modal-card-title">{{rooms[activeRoomId].roomName}}</p>
 				</header>
 				<section class="modal-card-body">
 					Hello
 				</section>
 				<footer class="modal-card-foot">
 					<a class="button is-success">Save changes</a>
-					<a class="button">Cancel</a>
+					<a @click="leaveRoom()" class="button">Leave room</a>
 				</footer>
 			</div>
 		</div>
@@ -45,7 +44,8 @@
 				isActive: false,
 				socket: null,
 				roomName: '',
-				rooms: {}
+				rooms: {},
+				activeRoomId: ''
 			}
 		},
 		methods: {
@@ -56,54 +56,22 @@
 				});
 				this.roomName = '';
 				this.isActive = true;
+				this.activeRoomId = this.socket.id;
 			},
 			leaveRoom(){
 
 				this.socket.emit('removeRoom', this.socket.id);
-
 				this.isActive = false;
+				this.activeRoomId = '';
+			},
+			joinRoom(roomIdToJoin, player2username){
+				//Pass in the id of room to join and username of joiner
+				this.socket.emit('joinRoom', [roomIdToJoin, player2username]);
+
 			}
-			// createRoom(username) {
-			// 	this.socket = this.socket || io();
-	
-			// 	this.socket.on('connect', () => {
-			// 		//Send server room info to create room
-			// 		this.socket.emit('createRoom' + this.socket.id, {
-			// 			ownerName: username,
-			// 			roomName: this.roomName,
-			// 			roomId: this.socket.id
-			// 		});
-			// 		this.roomName = '';
-	
-			// 		//Server responds back
-			// 		//roomInfo contains ownerObj, capacity, enemyName
-			// 		this.socket.on('roomCreated', (roomInfo) => {
-
-			// 			//Test prints
-			// 			console.log(roomInfo);
-			// 			console.log(roomInfo.ownerObj);
-
-			// 			this.activeRoom = roomInfo;
-			// 			this.rooms.push(roomInfo);
-			// 			this.isActive = true;
-			// 		});
-	
-			// 	});
-	
-			// },
-			// leaveRoom(){
-
-			// 	this.socket.disconnect();
-
-			// 	this.isActive = false;
-
-			// },
-
-			// joinRoom(username){
-			// 	console.log(username + ' join the room');
-			// }
 		},
 		mounted() {
+			//Connect with socket.io when loaded
 			this.socket = io();
 
 			this.socket.on('connect', () => {
