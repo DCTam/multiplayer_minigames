@@ -7,7 +7,7 @@
 				<div v-for="room in rooms">
 					<a @click="joinRoom(username)" class="panel-block">
 						<span class="panel-icon"><i class="fa fa-user"></i></span>
-						<p>({{room.capacity}}/2) - {{room.ownerObj.roomName}}</p>
+						<p>({{room.capacity}}/2) - {{room.roomName}}</p>
 					</a>
 				</div>
 	
@@ -22,7 +22,7 @@
 			<div class="modal-background"></div>
 			<div class="modal-card">
 				<header class="modal-card-head">
-					<p class="modal-card-title">{{activeRoom.ownerObj.roomName}}</p>
+					<p class="modal-card-title">{{}}Hey</p>
 					<button @click="leaveRoom()" class="delete"></button>
 				</header>
 				<section class="modal-card-body">
@@ -42,57 +42,78 @@
 	export default {
 		data() {
 			return {
-				'isActive': false,
-				currentStatus: "Waiting for player to join",
-				activeRoom: null,
-				rooms: [],
+				isActive: false,
 				socket: null,
-				roomName: ''
+				roomName: '',
+				rooms: {}
 			}
 		},
 		methods: {
-			createRoom(username) {
-				this.socket = this.socket || io();
-	
-				this.socket.on('connect', () => {
-					//Send server room info to create room
-					this.socket.emit('createRoom' + this.socket.id, {
-						ownerName: username,
-						roomName: this.roomName,
-						roomId: this.socket.id
-					});
-					this.roomName = '';
-	
-					//Server responds back
-					//roomInfo contains ownerObj, capacity, enemyName
-					this.socket.on('roomCreated', (roomInfo) => {
-
-						//Test prints
-						console.log(roomInfo);
-						console.log(roomInfo.ownerObj);
-
-						this.activeRoom = roomInfo;
-						this.rooms.push(roomInfo);
-						this.isActive = true;
-					});
-	
+			createRoom(user){
+				this.socket.emit('createRoom', {
+					ownerName: user,
+					roomName: this.roomName
 				});
-	
+				this.roomName = '';
+				this.isActive = true;
 			},
 			leaveRoom(){
 
-				this.socket.disconnect();
+				this.socket.emit('removeRoom', this.socket.id);
 
 				this.isActive = false;
-
-			},
-
-			joinRoom(username){
-				console.log(username + ' join the room');
 			}
+			// createRoom(username) {
+			// 	this.socket = this.socket || io();
+	
+			// 	this.socket.on('connect', () => {
+			// 		//Send server room info to create room
+			// 		this.socket.emit('createRoom' + this.socket.id, {
+			// 			ownerName: username,
+			// 			roomName: this.roomName,
+			// 			roomId: this.socket.id
+			// 		});
+			// 		this.roomName = '';
+	
+			// 		//Server responds back
+			// 		//roomInfo contains ownerObj, capacity, enemyName
+			// 		this.socket.on('roomCreated', (roomInfo) => {
+
+			// 			//Test prints
+			// 			console.log(roomInfo);
+			// 			console.log(roomInfo.ownerObj);
+
+			// 			this.activeRoom = roomInfo;
+			// 			this.rooms.push(roomInfo);
+			// 			this.isActive = true;
+			// 		});
+	
+			// 	});
+	
+			// },
+			// leaveRoom(){
+
+			// 	this.socket.disconnect();
+
+			// 	this.isActive = false;
+
+			// },
+
+			// joinRoom(username){
+			// 	console.log(username + ' join the room');
+			// }
 		},
 		mounted() {
-	
+			this.socket = io();
+
+			this.socket.on('connect', () => {
+				this.socket.emit('displayCoinFlipRooms');
+			});
+
+			this.socket.on('refreshCoinFlipRooms', (rooms) => {
+				this.rooms = rooms;
+			});
+			
 		},
 		props: ['username']
 	}

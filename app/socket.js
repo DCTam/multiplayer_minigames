@@ -1,6 +1,23 @@
 module.exports = (io) => {
 
-	let usersConnected = 0;
+	//Number of users connected to main chat
+	let usersConnectedMainChat = 0;
+
+	//objId: {roomName, capacity, player1, player2}
+	let rooms = {
+		room1: {
+			roomName: "Everyone join!",
+			capacity: 1,
+			player1: 'dan',
+			player2: 'bob'
+		},
+		room2: {
+			roomName: "Hello",
+			capacity: 2,
+			player1: 'lul',
+			player2: 'ctam'
+		}
+	};
 
 	io.on('connection', function(socket){
 			
@@ -8,8 +25,8 @@ module.exports = (io) => {
 		socket.on('joinMain', () => {
 			socket.join("MainChat", () => {
 				console.log("A user connected to main chat")
-				usersConnected++;
-				io.emit('updateOnlineUsers', usersConnected)
+				usersConnectedMainChat++;
+				io.emit('updateOnlineUsers', usersConnectedMainChat)
 
 				//Message Sending
 				socket.on('chat message', (messageObj) => {
@@ -20,32 +37,44 @@ module.exports = (io) => {
 				//On disconnect
 				socket.on('disconnect',() => {
 					console.log('A user disconnected');
-					usersConnected--;
-					io.emit('updateOnlineUsers', usersConnected)
+					usersConnectedMainChat--;
+					io.emit('updateOnlineUsers', usersConnectedMainChat)
 				});
 			});
 		});
+		
+		//Returns back coin flip room list
+		socket.on('displayCoinFlipRooms', () => {
 
-		//ownerObj contains: ownerName, roomName, roomId(socketid)
-		socket.on("createRoom" + socket.id, (ownerObj) => {
-			
-			socket.emit('roomCreated', {
-					ownerObj: ownerObj,
+			//Initialize room list
+			io.emit('refreshCoinFlipRooms', rooms);
+
+			socket.on('createRoom', (roomObj) => {
+				rooms[socket.id] = {
+					roomName: roomObj.roomName,
+					roomId: socket.id,
 					capacity: 1,
-					enemyName: ''
+					player1: roomObj.ownerName,
+					player2: ''
+				}
+
+				//Refresh room after creating room
+				io.emit('refreshCoinFlipRooms', rooms);
+
+				socket.join('room#' + socket.id, (roomObj) => {
+
+				});
+
 			});
 
-			//When user leaves a game room
-			socket.on('disconnect',() => {
-					console.log('A user disconnected from game room');
-				});
+			//Delete room entry when leaving created room
+			socket.on('removeRoom', (idToRemove) => {
+				delete rooms[idToRemove];
+				io.emit('refreshCoinFlipRooms', rooms);
+			});
+			
 		});
 
-		socket.on("joinRoom" + socket.id, () => {
-			console.log("user joined a room!!");
-		});
 	
-
 	});
-	
 }

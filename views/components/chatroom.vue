@@ -3,7 +3,7 @@
 		<div class="columns">
 			<div class="column is-half is-offset-one-quarter">
 				<br>
-				<p>Users online: {{usersConnected}}</p>
+				<p>Users online: {{usersConnectedMainChat}}</p>
 				<div class="box">
 					<!--Messages here-->
 					<div id="msgBox" style="overflow-y: scroll; height:400px; overflow:auto;">
@@ -33,16 +33,16 @@
 			return {
 				input: '',
 				messages: [],
-				usersConnected: 0,
-				socket: null,
-				MainChat: 'MainChat'
+				usersConnectedMainChat: 0,
+				socket: null			
 			}
 		},
 		mounted() {
 			this.socket = io();
 
 			this.socket.on('connect', () => {
-				this.socket.emit('joinMain', this.MainChat);
+				this.socket.emit('joinMain');
+				console.log(this.socket.id);
 			});
 
 			this.socket.on('push message', (messageObj) => {
@@ -52,7 +52,7 @@
 			});
 
 			this.socket.on('updateOnlineUsers', (onlineCount) => {
-				this.usersConnected = onlineCount;
+				this.usersConnectedMainChat = onlineCount;
 			});
 
 		},
