@@ -68,24 +68,39 @@ module.exports = (io) => {
 
 			});
 
-			//Delete room entry from list when leaving created room and update the room list
-			socket.on('removeRoom', (idToRemove) => {
-				delete rooms[idToRemove];
+			//Allows second player to join a room
+			//roomObj: {roomIdToJoin, player2username}
+			socket.on('joinRoom', (roomObj) => {
+
+				//Join a room
+				socket.join('room#' + roomObj.roomIdToJoin);
+
+				//Update the room information
+				rooms[roomObj.roomIdToJoin].capacity = 2;
+				rooms[roomObj.roomIdToJoin].player2 = roomObj.player2username;
+
+				//Update the room list
 				io.emit('refreshCoinFlipRooms', rooms);
 			});
 
-			//Allows second player to join created room
-			//roomArr[0] is roomIdToJoin, roomArr[1] is player2username
-			socket.on('joinRoom', (roomArr) => {
+			//Delete room entry from list when leaving room and update the room list
+			socket.on('leaveRoom', (idObj) => {
+				//If owner leaves game, close room for both players
+				if(idObj.leaverId === idObj.ownerId){
+					io.emit('closePlayer2Screen');
+					delete rooms[idObj.ownerId];
+				}
+				//If challenger leaves room, open up space
+				else {
+					rooms[idObj.ownerId].capacity = 1;
+				}
+				socket.leave('room#' + idObj.ownerId);
+				io.emit('refreshCoinFlipRooms', rooms);
+			});
 
-				//Join the created room
-				socket.join('room#' + roomArr[0]);
-
-				//Update the room information
-				rooms[roomArr[0]].capacity = 2;
-				rooms[roomArr[0]].player2 = roomArr[1];
-
-				//Update the room list
+			//Delete room entry from list when user disconnects
+			socket.on('disconnect', () => {
+				delete rooms[socket.id];
 				io.emit('refreshCoinFlipRooms', rooms);
 			});
 			
