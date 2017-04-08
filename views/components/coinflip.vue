@@ -15,8 +15,10 @@
 					<input v-model="roomName" type="text" class="input" placeholder="Enter room name to create">
 					<button @click="createRoom(username)" class="button is-primary is-outlined is-fullwidth">Create Room</button>
 				</div>
+				<p v-if="fullCapacity" class="help is-danger">Room is full!</p>
 			</nav>
 		</div>
+
 	
 		<div v-if="isActive" :class="{'is-active': isActive}" class="modal">
 			<div class="modal-background"></div>
@@ -43,6 +45,7 @@
 			return {
 				isActive: false,
 				isOwner: false,
+				fullCapacity: false,
 				socket: null,
 				roomName: '',
 				rooms: {},
@@ -59,6 +62,7 @@
 				this.isActive = true;
 				this.activeRoomId = this.socket.id;
 				this.isOwner = true; //Set to true since you made the room
+				this.fullCapacity = false;
 			},
 			leaveRoom(){
 				//Pass in activeRoomId and own id to see if you are owner of room or not
@@ -81,10 +85,11 @@
 					});
 					this.activeRoomId = roomIdToJoin;
 					this.isActive = true;
+					this.fullCapacity = false;
 				}
 				//If room has no space, show error
 				else {
-					console.log("no space");
+					this.fullCapacity = true;
 				}
 			}
 		},
