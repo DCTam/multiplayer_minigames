@@ -153,7 +153,7 @@
 			// });
 
 			this.socket.on('startSelection', () => {
-				this.roomStatus = null;
+				this.roomStatus = "Select one of the follow: ";
 				this.isGameStarted = true;
 				this.isSelecting = true;
 			});
