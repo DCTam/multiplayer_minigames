@@ -4,7 +4,7 @@
 			<nav class="panel">
 
 				<p class="panel-heading" style="text-align:left;">List of Rooms - Coin Flip
-					<span style="float:right">Number of in this lobby: {{usersConnectedCoinFlip}}
+					<span style="float:right">Users connected in this lobby: {{usersConnectedCoinFlip}}
 					</span>
 				</p>
 	
@@ -133,7 +133,7 @@
 			this.socket = io();
 
 			this.socket.on('connect', () => {
-				this.socket.emit('displayCoinFlipRooms');
+				this.socket.emit('joinCoinFlipLobby');
 			});
 
 			//roomInfo[0] is the room list, roomInfo[1] is the number of connected users

@@ -39,11 +39,11 @@
 			this.socket = io();
 
 			this.socket.on('connect', () => {
-				this.socket.emit('joinMain');
+				this.socket.emit('joinMainChat');
 				console.log(this.socket.id);
 			});
 
-			this.socket.on('push message', (messageObj) => {
+			this.socket.on('pushMessage', (messageObj) => {
 				this.messages.push(messageObj.username + ": " + messageObj.message);
 				this.scrollDown();
 			});
@@ -58,7 +58,7 @@
 		methods: {
 			submitMsg(username){
 				if(this.input == ''){return;}
-				this.socket.emit('chat message', {
+				this.socket.emit('chatMessage', {
 					username: username,
 					message: this.input
 				});

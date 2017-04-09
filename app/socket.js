@@ -1,137 +1,16 @@
 module.exports = (io) => {
 
-	//Number of users connected to main chat
-	let usersConnectedMainChat = 0;
-	let messages = [];
-
-	//socketId: {roomName, roomId, capacity, player1, player2}, {usersConnectedCoinFlip: #}. Example rooms
-	let rooms = {
-		usersConnectedCoinFlip: 0
-	};
-
-	io.on('connection', function(socket){
+	io.on('connection', (socket) => {
 			
-		//Called when user clicks on Chatroom component
-		socket.on('joinMain', () => {
-
-			//Join channel and pass in user connected count and messages
-			socket.join('MainChat');
-			usersConnectedMainChat++;
-			io.to('MainChat').emit('updateOnlineUsers', [usersConnectedMainChat, messages]);
-
-			//Message Sending
-			socket.on('chat message', (messageObj) => {
-				messages.push(messageObj.username +": " + messageObj.message);
-				io.to('MainChat').emit('push message', messageObj);
-			});
-
-			//On disconnect from main chat, decrement user online count
-			socket.on('disconnect',() => {
-				console.log('A user disconnected');
-				usersConnectedMainChat--;
-				socket.leave('MainChat');
-				io.emit('updateOnlineUsers', [usersConnectedMainChat, messages]);
-			});
-
-
-			// socket.join('MainChat', () => {
-			// 	console.log('A user connected to main chat');
-			// 	usersConnectedMainChat++;
-			// 	io.emit('updateOnlineUsers', [usersConnectedMainChat, messages])
-
-			// 	//Message Sending
-			// 	socket.on('chat message', (messageObj) => {
-			// 		messages.push(messageObj.username +": " + messageObj.message);
-			// 		io.emit('push message', messages);
-			// 	});
-
-			// 	//On disconnect from main chat, decrement user online count
-			// 	socket.on('disconnect',() => {
-			// 		console.log('A user disconnected');
-			// 		usersConnectedMainChat--;
-			// 		io.emit('updateOnlineUsers', usersConnectedMainChat)
-			// 	});
-			// });
+		//Require socket function when a user joins the main chat
+		socket.on('joinMainChat', () => {
+			require('./socket_components/main_chat_socket.js')(io, socket);
 		});
 		
 		//Called when user clicks on CoinFlip component
-		socket.on('displayCoinFlipRooms', () => {
-
-			//Increment number of users connnected
-			rooms['usersConnectedCoinFlip']++;
-
-			//Initialize room list and player count
-			io.emit('refreshCoinFlipRooms', rooms);
-
-			socket.on('createRoom', (roomObj) => {
-				rooms[socket.id] = {
-					roomName: roomObj.roomName,
-					roomId: socket.id,
-					isReadyToStart: false,
-					capacity: 1,
-					player1: roomObj.ownerName,
-					player2: ''
-				}
-
-				//Refresh room after creating room
-				io.emit('refreshCoinFlipRooms', rooms);
-
-				//Automatically have room creator join created room
-				socket.join('room#' + socket.id);
-
-			});
-
-			//Allows second player to join a room
-			//roomObj: {roomIdToJoin, player2username}
-			socket.on('joinRoom', (roomObj) => {
-
-				//Join the room
-				socket.join('room#' + roomObj.roomIdToJoin);
-
-				//Update the room information
-				rooms[roomObj.roomIdToJoin].capacity = 2;
-				rooms[roomObj.roomIdToJoin].player2 = roomObj.player2username;
-				rooms[roomObj.roomIdToJoin].isReadyToStart = true;
-
-				//Update the room list
-				io.emit('refreshCoinFlipRooms', rooms);
-			});
-
-			//Delete room entry from list when leaving room and update the room list
-			socket.on('leaveRoom', (idObj) => {
-				//If owner leaves game, close room for both players
-				if(idObj.leaverId === idObj.ownerId){
-					delete rooms[idObj.ownerId];
-				}
-				//If challenger leaves room, open up space
-				else {
-					rooms[idObj.ownerId].capacity = 1;
-					rooms[idObj.ownerId].player2 = '';
-					rooms[idObj.ownerId].isReadyToStart = false;
-
-				}
-				socket.leave('room#' + idObj.ownerId);
-				io.emit('refreshCoinFlipRooms', rooms);
-			});
-
-			//Delete room entry from list when user disconnects
-			socket.on('disconnect', () => {
-				delete rooms[socket.id];
-				rooms['usersConnectedCoinFlip']--;
-				io.emit('refreshCoinFlipRooms', rooms);
-			});
-			
+		socket.on('joinCoinFlipLobby', () => {
+			require('./socket_components/coin_flip_socket.js')(io, socket);
 		});
 
-		//Logic when game is started
-		socket.on('startGame', (activeRoomId) => {
-
-			let random = Math.floor(Math.random() * 2) + 1;
-			let winner;
-			(random == 1) ? winner = rooms[activeRoomId].player1 : winner = rooms[activeRoomId].player2;
-			console.log(winner);
-
-			io.to('room#' + activeRoomId).emit('startingGame', winner);
-		});
 	});
 }
