@@ -6,14 +6,12 @@
 				<p>Users online: {{usersConnectedMainChat}}</p>
 				<div class="box">
 					<!--Messages here-->
-					<div id="msgBox" style="overflow-y: scroll; height:400px; overflow:auto;">
+					<div id="msgBox" style="overflow-y: scroll; height:400px; overflow: auto; padding-bottom: 18px;">
 						<div id="messages" v-for="message in messages">
 							{{message}}
 						</div>
 					</div>
 	
-					
-					
 					<hr>
 					<div class="field is-horizontal" style="position: relative;">
 						<form @submit.prevent="submitMsg(username)">
@@ -47,12 +45,13 @@
 
 			this.socket.on('push message', (messageObj) => {
 				this.messages.push(messageObj.username + ": " + messageObj.message);
-				let d = document.getElementById("msgBox");
-     			d.scrollTop = d.scrollHeight;
+				this.scrollDown();
 			});
-
-			this.socket.on('updateOnlineUsers', (onlineCount) => {
-				this.usersConnectedMainChat = onlineCount;
+			//chatArr[0] = userOnlineCount, chatArr[1] = chatMessagesArray
+			this.socket.on('updateOnlineUsers', (chatArr) => {
+				this.usersConnectedMainChat = chatArr[0];
+				this.messages = chatArr[1];
+				setTimeout(() => {this.scrollDown();}); //Workaround to scroll to bottom after joining chatroom
 			});
 
 		},
@@ -64,6 +63,10 @@
 					message: this.input
 				});
 				this.input = '';
+			},
+			scrollDown(){
+				let d = document.getElementById("msgBox");
+     			d.scrollTop = d.scrollHeight;
 			}
 		},
 		props: ['username']

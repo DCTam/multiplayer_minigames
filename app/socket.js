@@ -2,6 +2,7 @@ module.exports = (io) => {
 
 	//Number of users connected to main chat
 	let usersConnectedMainChat = 0;
+	let messages = [];
 
 	//socketId: {roomName, roomId, capacity, player1, player2}. Example rooms
 	let rooms = {};
@@ -10,24 +11,45 @@ module.exports = (io) => {
 			
 		//Called when user clicks on Chatroom component
 		socket.on('joinMain', () => {
-			socket.join('MainChat', () => {
-				console.log('A user connected to main chat');
-				usersConnectedMainChat++;
-				io.emit('updateOnlineUsers', usersConnectedMainChat)
 
-				//Message Sending
-				socket.on('chat message', (messageObj) => {
-					console.log(messageObj.username +": " + messageObj.message);
-					io.emit('push message', messageObj);
-				});
+			//Join channel and pass in user connected count and messages
+			socket.join('MainChat');
+			usersConnectedMainChat++;
+			io.to('MainChat').emit('updateOnlineUsers', [usersConnectedMainChat, messages]);
 
-				//On disconnect from main chat, decrement user online count
-				socket.on('disconnect',() => {
-					console.log('A user disconnected');
-					usersConnectedMainChat--;
-					io.emit('updateOnlineUsers', usersConnectedMainChat)
-				});
+			//Message Sending
+			socket.on('chat message', (messageObj) => {
+				messages.push(messageObj.username +": " + messageObj.message);
+				io.to('MainChat').emit('push message', messageObj);
 			});
+
+			//On disconnect from main chat, decrement user online count
+			socket.on('disconnect',() => {
+				console.log('A user disconnected');
+				usersConnectedMainChat--;
+				socket.leave('MainChat');
+				io.emit('updateOnlineUsers', [usersConnectedMainChat, messages]);
+			});
+
+
+			// socket.join('MainChat', () => {
+			// 	console.log('A user connected to main chat');
+			// 	usersConnectedMainChat++;
+			// 	io.emit('updateOnlineUsers', [usersConnectedMainChat, messages])
+
+			// 	//Message Sending
+			// 	socket.on('chat message', (messageObj) => {
+			// 		messages.push(messageObj.username +": " + messageObj.message);
+			// 		io.emit('push message', messages);
+			// 	});
+
+			// 	//On disconnect from main chat, decrement user online count
+			// 	socket.on('disconnect',() => {
+			// 		console.log('A user disconnected');
+			// 		usersConnectedMainChat--;
+			// 		io.emit('updateOnlineUsers', usersConnectedMainChat)
+			// 	});
+			// });
 		});
 		
 		//Called when user clicks on CoinFlip component
