@@ -4,22 +4,7 @@ module.exports = (io) => {
 	let usersConnectedMainChat = 0;
 
 	//socketId: {roomName, roomId, capacity, player1, player2}. Example rooms
-	let rooms = {
-		room1: {
-			roomName: 'Everyone join!',
-			roomId: 'dgdfg',
-			capacity: 1,
-			player1: 'dan',
-			player2: 'bob'
-		},
-		room2: {
-			roomName: 'Hello',
-			roomId: 'mememeee',
-			capacity: 2,
-			player1: 'lul',
-			player2: 'ctam'
-		}
-	};
+	let rooms = {};
 
 	io.on('connection', function(socket){
 			
@@ -120,8 +105,5 @@ module.exports = (io) => {
 
 			io.to('room#' + activeRoomId).emit('startingGame', winner);
 		});
-
-
-	
 	});
 }

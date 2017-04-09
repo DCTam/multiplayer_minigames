@@ -19,7 +19,6 @@
 			</nav>
 		</div>
 
-	
 		<div v-if="rooms[activeRoomId]" :class="{'is-active': rooms[activeRoomId]}" class="modal">
 			<div class="modal-background"></div>
 			<div class="modal-card">

@@ -60,11 +60,3 @@ http.listen(port, (err, res) => {
 		console.log('Server running on port ' + port + '...');
 	}
 });
-// app.listen(port, (err, res) => {
-// 	if (err){
-// 		console.log("ERROR: " + err);
-// 	}
-// 	else{
-// 		console.log('Server running on port ' + port + '...');
-// 	}
-// });
