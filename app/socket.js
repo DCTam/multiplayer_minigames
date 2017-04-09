@@ -73,7 +73,7 @@ module.exports = (io) => {
 			//roomObj: {roomIdToJoin, player2username}
 			socket.on('joinRoom', (roomObj) => {
 
-				//Join a room
+				//Join the room
 				socket.join('room#' + roomObj.roomIdToJoin);
 
 				//Update the room information
@@ -109,6 +109,18 @@ module.exports = (io) => {
 			});
 			
 		});
+
+		//Logic when game is started
+		socket.on('startGame', (activeRoomId) => {
+
+			let random = Math.floor(Math.random() * 2) + 1;
+			let winner;
+			(random == 1) ? winner = rooms[activeRoomId].player1 : winner = rooms[activeRoomId].player2;
+			console.log(winner);
+
+			io.to('room#' + activeRoomId).emit('startingGame', winner);
+		});
+
 
 	
 	});

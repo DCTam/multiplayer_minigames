@@ -27,11 +27,17 @@
 					<p v-if="rooms[activeRoomId]" class="modal-card-title">{{rooms[activeRoomId].roomName}}</p>
 				</header>
 				<section class="modal-card-body">
-						<p>{{roomStatus}}</p>
+						<p>{{roomStatus}}
+							<div v-if="isGameStarted">
+								Flipping in: {{timer}} seconds				
+							</div>
+							
+						</p>
+					
 				</section>
 				<footer class="modal-card-foot">
-					<a v-if="isOwner" class="button is-success">Start game</a>
-					<a @click="leaveRoom()" class="button">Leave room</a>
+					<a v-if="isOwner && !isGameStarted" @click="startGame(activeRoomId)" class="button is-success">Start game</a>
+					<a v-if="!isGameStarted" @click="leaveRoom()" class="button">Leave room</a>
 				</footer>
 			</div>
 		</div>
@@ -46,11 +52,13 @@
 				isOwner: false, //To determine ownership of room; enables "Start game" button
 				isRoomFullWhenJoining: false, //Checks to see if room is full or not; displays error if it's full
 				socket: null, //Socket connection
-				//isGameStarted: false, //False until receives broadcast from server
+				isGameStarted: false, //False until receives broadcast from server
 				roomStatus: '', //Display what to show when inside a room
 				roomName: '', //Double binded text field to create room name
 				rooms: {}, //List of rooms from the server
-				activeRoomId: '' //To enable modal screen (play screen)
+				activeRoomId: '', //To enable modal screen (play screen)
+				timer: 3, //Three second timer before starting game
+				winner: '' //Hold winner username when server returns result
 			}
 		},
 		methods: {
@@ -65,12 +73,11 @@
 				this.isRoomFullWhenJoining = false;
 			},
 			leaveRoom(){
-				//Pass in activeRoomId and own id to see if you are owner of room or not
+				//Pass in activeRoomId and owner id to see if you are owner of room or not
 				this.socket.emit('leaveRoom', {
 					ownerId: this.activeRoomId,
 					leaverId: this.socket.id
 				});
-				console.log(this.activeRoomId + "\n" + this.socket.id);
 				this.activeRoomId = '';
 				this.isOwner = false; //Set to false to hide 'Start game' button
 				this.isRoomFullWhenJoining = false;
@@ -90,6 +97,31 @@
 				else {
 					this.isRoomFullWhenJoining = true;
 				}
+			},
+			startGame(roomId){
+				//If room is ready to start, tell server
+				if(this.rooms[roomId].isReadyToStart){
+					this.socket.emit('startGame', roomId);
+				}
+				//If not, display not ready status to owner
+				else {
+					this.roomStatus = 'Room is not ready to start. Please wait for second player';
+				}
+			},
+			startCountdown(){
+				//Countdown timer 
+				this.countdownFunc = setInterval(() => {
+
+					this.timer -= 1;
+					if(this.timer == 0) {
+						clearInterval(this.countdownFunc);
+						this.roomStatus = 'Player ' + this.winner + ' won!';
+						this.isGameStarted = false;
+
+						//Reset timer
+						this.timer = 3;
+					}
+				}, 1000);
 			}
 		},
 		mounted() {
@@ -103,6 +135,13 @@
 			this.socket.on('refreshCoinFlipRooms', (rooms) => {
 				this.rooms = rooms;
 			});
+
+			this.socket.on('startingGame', (winner) => {
+				this.isGameStarted = true;
+				this.roomStatus = null;
+				this.winner = winner;
+				this.startCountdown();
+			});
 			
 		},
 		watch: {
@@ -115,6 +154,7 @@
 				//Reset the activeRoomId if room doesnt exist anymore
 				else {
 					this.activeRoomId = '';
+					this.isGameStarted = false;
 				}
 
 			}
