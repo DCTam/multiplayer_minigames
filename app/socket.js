@@ -4,8 +4,10 @@ module.exports = (io) => {
 	let usersConnectedMainChat = 0;
 	let messages = [];
 
-	//socketId: {roomName, roomId, capacity, player1, player2}. Example rooms
-	let rooms = {};
+	//socketId: {roomName, roomId, capacity, player1, player2}, {usersConnectedCoinFlip: #}. Example rooms
+	let rooms = {
+		usersConnectedCoinFlip: 0
+	};
 
 	io.on('connection', function(socket){
 			
@@ -55,7 +57,10 @@ module.exports = (io) => {
 		//Called when user clicks on CoinFlip component
 		socket.on('displayCoinFlipRooms', () => {
 
-			//Initialize room list
+			//Increment number of users connnected
+			rooms['usersConnectedCoinFlip']++;
+
+			//Initialize room list and player count
 			io.emit('refreshCoinFlipRooms', rooms);
 
 			socket.on('createRoom', (roomObj) => {
@@ -112,6 +117,7 @@ module.exports = (io) => {
 			//Delete room entry from list when user disconnects
 			socket.on('disconnect', () => {
 				delete rooms[socket.id];
+				rooms['usersConnectedCoinFlip']--;
 				io.emit('refreshCoinFlipRooms', rooms);
 			});
 			

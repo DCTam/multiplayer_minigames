@@ -2,10 +2,14 @@
 	<div>
 		<div class="container">
 			<nav class="panel">
-				<p class="panel-heading">List of Rooms </p>
+
+				<p class="panel-heading" style="text-align:left;">List of Rooms - Coin Flip
+					<span style="float:right">Number of in this lobby: {{usersConnectedCoinFlip}}
+					</span>
+				</p>
 	
 				<div v-for="room in rooms">
-					<a @click="joinRoom(room.roomId, username)" class="panel-block">
+					<a v-if="room.roomId" @click="joinRoom(room.roomId, username)" class="panel-block">
 						<span class="panel-icon"><i class="fa fa-user"></i></span>
 						<p>({{room.capacity}}/2) - {{room.roomName}}</p>
 					</a>
@@ -57,7 +61,8 @@
 				rooms: {}, //List of rooms from the server
 				activeRoomId: '', //To enable modal screen (play screen)
 				timer: 3, //Three second timer before starting game
-				winner: '' //Hold winner username when server returns result
+				winner: '', //Hold winner username when server returns result
+				usersConnectedCoinFlip: 0 //Hold number of users connected
 			}
 		},
 		methods: {
@@ -131,8 +136,10 @@
 				this.socket.emit('displayCoinFlipRooms');
 			});
 
+			//roomInfo[0] is the room list, roomInfo[1] is the number of connected users
 			this.socket.on('refreshCoinFlipRooms', (rooms) => {
 				this.rooms = rooms;
+				this.usersConnectedCoinFlip = rooms['usersConnectedCoinFlip'];
 			});
 
 			this.socket.on('startingGame', (winner) => {
