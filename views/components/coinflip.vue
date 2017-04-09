@@ -15,19 +15,19 @@
 					<input v-model="roomName" type="text" class="input" placeholder="Enter room name to create">
 					<button @click="createRoom(username)" class="button is-primary is-outlined is-fullwidth">Create Room</button>
 				</div>
-				<p v-if="fullCapacity" class="help is-danger">Room is full!</p>
+				<p v-if="isRoomFullWhenJoining" class="help is-danger">Room is full!</p>
 			</nav>
 		</div>
 
 	
-		<div v-if="isActive" :class="{'is-active': isActive}" class="modal">
+		<div v-if="rooms[activeRoomId]" :class="{'is-active': rooms[activeRoomId]}" class="modal">
 			<div class="modal-background"></div>
 			<div class="modal-card">
 				<header class="modal-card-head">
 					<p v-if="rooms[activeRoomId]" class="modal-card-title">{{rooms[activeRoomId].roomName}}</p>
 				</header>
 				<section class="modal-card-body">
-					Hello
+						<p>{{roomStatus}}</p>
 				</section>
 				<footer class="modal-card-foot">
 					<a v-if="isOwner" class="button is-success">Start game</a>
@@ -43,13 +43,14 @@
 	export default {
 		data() {
 			return {
-				isActive: false,
-				isOwner: false,
-				fullCapacity: false,
-				socket: null,
-				roomName: '',
-				rooms: {},
-				activeRoomId: ''
+				isOwner: false, //To determine ownership of room; enables "Start game" button
+				isRoomFullWhenJoining: false, //Checks to see if room is full or not; displays error if it's full
+				socket: null, //Socket connection
+				//isGameStarted: false, //False until receives broadcast from server
+				roomStatus: '', //Display what to show when inside a room
+				roomName: '', //Double binded text field to create room name
+				rooms: {}, //List of rooms from the server
+				activeRoomId: '' //To enable modal screen (play screen)
 			}
 		},
 		methods: {
@@ -59,10 +60,9 @@
 					roomName: this.roomName
 				});
 				this.roomName = ''; //Reset field to blank after creating a room
-				this.isActive = true;
 				this.activeRoomId = this.socket.id;
 				this.isOwner = true; //Set to true since you made the room
-				this.fullCapacity = false;
+				this.isRoomFullWhenJoining = false;
 			},
 			leaveRoom(){
 				//Pass in activeRoomId and own id to see if you are owner of room or not
@@ -71,9 +71,9 @@
 					leaverId: this.socket.id
 				});
 				console.log(this.activeRoomId + "\n" + this.socket.id);
-				this.isActive = false; //Set to false to remove modal screen
 				this.activeRoomId = '';
-				this.isOwner = false; //Set to false to disable 'Start game' button
+				this.isOwner = false; //Set to false to hide 'Start game' button
+				this.isRoomFullWhenJoining = false;
 			},
 			joinRoom(roomIdToJoin, player2username){
 				//Join only if room has space
@@ -84,12 +84,11 @@
 						player2username: player2username
 					});
 					this.activeRoomId = roomIdToJoin;
-					this.isActive = true;
-					this.fullCapacity = false;
+					this.isRoomFullWhenJoining = false;
 				}
 				//If room has no space, show error
 				else {
-					this.fullCapacity = true;
+					this.isRoomFullWhenJoining = true;
 				}
 			}
 		},
@@ -105,11 +104,20 @@
 				this.rooms = rooms;
 			});
 			
-			//Close modal for player 2 if owner leaves
-			this.socket.on('closePlayer2Screen', () => {
-				this.isActive = false;
-			});
-			
+		},
+		watch: {
+			rooms(newRoomList){
+
+				//Change room status depending on how how many people are in the room
+				if(newRoomList[this.activeRoomId]){
+					newRoomList[this.activeRoomId].isReadyToStart ? this.roomStatus = "Game is now ready to start" : this.roomStatus = "Please wait for a player to join";
+				}
+				//Reset the activeRoomId if room doesnt exist anymore
+				else {
+					this.activeRoomId = '';
+				}
+
+			}
 		},
 		props: ['username']
 	}

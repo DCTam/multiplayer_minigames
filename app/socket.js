@@ -55,6 +55,7 @@ module.exports = (io) => {
 				rooms[socket.id] = {
 					roomName: roomObj.roomName,
 					roomId: socket.id,
+					isReadyToStart: false,
 					capacity: 1,
 					player1: roomObj.ownerName,
 					player2: ''
@@ -78,6 +79,7 @@ module.exports = (io) => {
 				//Update the room information
 				rooms[roomObj.roomIdToJoin].capacity = 2;
 				rooms[roomObj.roomIdToJoin].player2 = roomObj.player2username;
+				rooms[roomObj.roomIdToJoin].isReadyToStart = true;
 
 				//Update the room list
 				io.emit('refreshCoinFlipRooms', rooms);
@@ -87,12 +89,14 @@ module.exports = (io) => {
 			socket.on('leaveRoom', (idObj) => {
 				//If owner leaves game, close room for both players
 				if(idObj.leaverId === idObj.ownerId){
-					io.emit('closePlayer2Screen');
 					delete rooms[idObj.ownerId];
 				}
 				//If challenger leaves room, open up space
 				else {
 					rooms[idObj.ownerId].capacity = 1;
+					rooms[idObj.ownerId].player2 = '';
+					rooms[idObj.ownerId].isReadyToStart = false;
+
 				}
 				socket.leave('room#' + idObj.ownerId);
 				io.emit('refreshCoinFlipRooms', rooms);
