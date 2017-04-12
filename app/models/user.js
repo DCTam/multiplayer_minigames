@@ -1,14 +1,15 @@
 //Mongoose and encryption library
-let mongoose = require('mongoose');
-let bcrypt   = require('bcrypt-nodejs');
+const mongoose = require('mongoose');
+const bcrypt   = require('bcrypt-nodejs');
 
 //Define schema
-let userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
 
-    local            : {
-        username     : String,
-        password     : String,
-    }
+	username: String,
+	password: String,
+	wins: Number,
+	losses: Number
+    
 });
 
 //Creating the hash for password
@@ -18,7 +19,7 @@ userSchema.methods.generateHash = function(password) {
 
 //Validate password
 userSchema.methods.validPassword = function(password) {
-    return bcrypt.compareSync(password, this.local.password);
+    return bcrypt.compareSync(password, this.password);
 };
 
 module.exports = mongoose.model('User', userSchema);

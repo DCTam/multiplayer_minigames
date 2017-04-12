@@ -1,3 +1,5 @@
+const crud = require('../mongo/crud.js');
+
 //Example of room object
 // {
 // 	usersConnectedRPS: 0,
@@ -107,6 +109,7 @@ module.exports = (io, socket) => {
 			console.log(roomsRPS[roomObj.roomId].player1Choice + roomsRPS[roomObj.roomId].player2Choice);
 
 			let winner;
+			let loser;
 			let winnerChoice;
 
 			if(roomsRPS[roomObj.roomId].player1Choice == roomsRPS[roomObj.roomId].player2Choice){
@@ -119,10 +122,12 @@ module.exports = (io, socket) => {
 			){
 				winner = roomsRPS[roomObj.roomId].player1;
 				winnerChoice = roomsRPS[roomObj.roomId].player1Choice;
+				loser = roomsRPS[roomObj.roomId].player2;
 			}
 			else {
 				winner = roomsRPS[roomObj.roomId].player2;
 				winnerChoice = roomsRPS[roomObj.roomId].player2Choice;
+				loser = roomsRPS[roomObj.roomId].player1;
 			}
 			console.log(winner);
 			io.to('room#' + roomObj.roomId). emit('gameDecision', {
@@ -133,6 +138,8 @@ module.exports = (io, socket) => {
 			//Clear choices incase both user stays in room for more rounds
 			roomsRPS[roomObj.roomId].player1Choice = null;
 			roomsRPS[roomObj.roomId].player2Choice = null;
+
+			crud.updateWinsLosses(winner, loser);
 		}
 	});
 

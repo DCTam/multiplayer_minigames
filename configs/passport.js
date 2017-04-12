@@ -1,6 +1,6 @@
-var LocalStrategy = require('passport-local').Strategy;
-var User = require('../app/models/user');
-let passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const User = require('../app/models/user');
+const passport = require('passport');
 
     passport.serializeUser((user, done) => {
         done(null, user.id);
@@ -20,7 +20,7 @@ let passport = require('passport');
     (req, username, password, done) => {
 
         process.nextTick(() => {
-			User.findOne({ 'local.username' :  username }, (err, user) => {
+			User.findOne({ 'username' :  username }, (err, user) => {
 				if (err){
 					return done(err);
 				}
@@ -31,8 +31,8 @@ let passport = require('passport');
 				else {
 
 					let newUser = new User();
-					newUser.local.username = username;
-					newUser.local.password = newUser.generateHash(password);
+					newUser.username = username;
+					newUser.password = newUser.generateHash(password);
 
 					newUser.save((err) => {
 						if (err){
@@ -51,7 +51,7 @@ let passport = require('passport');
         passReqToCallback : true
     },
     (req, username, password, done) => { 
-        User.findOne({ 'local.username' :  username }, (err, user) => {
+        User.findOne({ 'username' :  username }, (err, user) => {
             if (err){
                 return done(err);
 			}

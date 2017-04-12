@@ -17,5 +17,11 @@ module.exports = (io) => {
 			require('./socket_components/rps_socket.js')(io, socket);
 		});
 
+		//Called when user clicks on Profile component
+
+		socket.on('joinProfile', (username) => {
+			require('./socket_components/profile_socket.js')(io, socket, username);
+		});
+
 	});
 }
