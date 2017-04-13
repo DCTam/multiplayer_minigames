@@ -16,6 +16,12 @@
 			</div>
 			<div class="level-item has-text-centered">
 				<div>
+					<p class="heading">Ties</p>
+					<p class="title" v-if="userObj">{{userObj.ties || 0}}</p>
+				</div>
+			</div>
+			<div class="level-item has-text-centered">
+				<div>
 					<p class="heading">Win Rate</p>
 					<p class="title" v-if="userObj">{{winRate || 0}}%</p>
 				</div>
@@ -38,7 +44,7 @@
 				<td>{{player.username}}</td>
 				<td>{{player.wins}}</td>
 				<td>{{player.losses}}</td>
-				<td></td>
+				<td>{{player.ties}}</td>
 				<td>{{(player.wins / (player.wins + player.losses)).toFixed(2)}}</td>
 			</tr>
 	

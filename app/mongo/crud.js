@@ -2,31 +2,51 @@ const User = require('../models/user');
 const mongoose = require('mongoose');
 
 
-function updateWinsLosses(winner,loser){
+function updateWinsLosses(winner,loser, isTie){
 
-	//Increment winner's wins statistic by one
-	User.findOneAndUpdate({username: winner}, {$inc:{wins: 1}}, (err, doc) => {
-		if(doc){
-			console.log("Something wrong when updating data!");
-		}
+	//If game ended with a tie, increment both players tie
+	if(isTie){
+		User.findOneAndUpdate({username: winner}, {$inc:{ties: 1}}, (err, doc) => {
+			if(err){
+				console.log(err);
+			}
+			console.log(doc);
+		});
 
-		console.log(doc);
-	});
+		//Increment loser's losses statistics by one
+		User.findOneAndUpdate({username: loser}, {$inc:{ties: 1}}, (err, doc) => {
+			if(err){
+				console.log(err);
+			}
+			console.log(doc);
+		});
+	}
+	//If game did not end with a tie
+	else{
+		//Increment winner's wins statistic by one
+		User.findOneAndUpdate({username: winner}, {$inc:{wins: 1}}, (err, doc) => {
+			if(err){
+				console.log("Something wrong when updating data!");
+			}
 
-	//Increment loser's losses statistics by one
-	User.findOneAndUpdate({username: loser}, {$inc:{losses: 1}}, (err, doc) => {
-		if(doc){
-			console.log("Something wrong when updating data!");
-		}
+			console.log(doc);
+		});
 
-		console.log(doc);
-	});
+		//Increment loser's losses statistics by one
+		User.findOneAndUpdate({username: loser}, {$inc:{losses: 1}}, (err, doc) => {
+			if(err){
+				console.log("Something wrong when updating data!");
+			}
+
+			console.log(doc);
+		});
+	}
 }
 
 function retrieveProfile(username, callback) {
 
-	User.find({username: username}, {wins: 1, losses: 1}, (err, doc) => {
-		//Return err if any
+	User.find({username: username}, {wins: 1, losses: 1, ties: 1}, (err, doc) => {
+		//Return error if any
 		if(err){
 			console.log(err);
 		}

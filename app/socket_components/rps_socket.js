@@ -110,10 +110,12 @@ module.exports = (io, socket) => {
 
 			let winner;
 			let loser;
+			let isTie = false;
 			let winnerChoice;
 
 			if(roomsRPS[roomObj.roomId].player1Choice == roomsRPS[roomObj.roomId].player2Choice){
 				winner = null;
+				isTie = true;
 				winnerChoice = roomObj.userChoice;
 			}
 			else if (roomsRPS[roomObj.roomId].player1Choice == 'Rock' && roomsRPS[roomObj.roomId].player2Choice == 'Scissor'
@@ -139,7 +141,7 @@ module.exports = (io, socket) => {
 			roomsRPS[roomObj.roomId].player1Choice = null;
 			roomsRPS[roomObj.roomId].player2Choice = null;
 
-			crud.updateWinsLosses(winner, loser);
+			isTie ? crud.updateWinsLosses(roomsRPS[roomObj.roomId].player1, roomsRPS[roomObj.roomId].player2, true) :crud.updateWinsLosses(winner, loser, false);
 		}
 	});
 
