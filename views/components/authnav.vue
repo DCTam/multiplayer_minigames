@@ -3,7 +3,7 @@
 		<nav class="nav has-shadow">
 
 			<div class="nav-left nav-menu">
-				<a href="/homepage" class="nav-item is-tab">CSGOBIGRIPOFFSITE</a>
+				<a href="/homepage" class="nav-item is-tab">RPS Hub</a>
 			</div>
 
 			<div class="nav-center nav-menu">

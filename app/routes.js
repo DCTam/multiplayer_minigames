@@ -12,7 +12,7 @@ module.exports = (app, passport, router) => {
 			},
 			vue: {
 				head: {
-					title: 'Play Site',
+					title: 'Game Hub',
 					meta: styleArr
 				},
 				components: ['topnav']
@@ -72,7 +72,7 @@ module.exports = (app, passport, router) => {
 			},
 			vue: {
 				head: {
-					title: 'Homepage',
+					title: 'Hub - Homepage',
 					meta: [
 					{style: 'https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.0/css/bulma.min.css', type: 'text/css', rel: 'stylesheet'},
 					{style: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', type: 'text/css', rel: 'stylesheet'},

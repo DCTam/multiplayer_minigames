@@ -2,7 +2,7 @@
 	<div>
 		<nav class="nav has-shadow">
 			<div class="nav-left nav-menu">
-				<a href="/" class="nav-item is-tab">CSGOBIGRIPOFFSITE</a>
+				<a href="/" class="nav-item is-tab">RPS Hub</a>
 			</div>
 			<div class="nav-right nav-menu">
 				<a href="/signup" :class="{'is-active': buttons.su}" class="nav-item is-tab">Sign Up</a>
