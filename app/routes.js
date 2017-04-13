@@ -12,7 +12,7 @@ module.exports = (app, passport, router) => {
 			},
 			vue: {
 				head: {
-					title: 'Game Hub',
+					title: 'RPS Hub',
 					meta: styleArr
 				},
 				components: ['topnav']
