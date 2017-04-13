@@ -75,7 +75,6 @@
 			
 			this.socket.on('refreshLeaderBoard', (playerList) => {
 				this.playerList = playerList;
-				console.log(playerList);
 			});
 		},
 		computed: {
