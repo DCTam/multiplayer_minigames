@@ -3,12 +3,6 @@
 		<nav class="level">
 			<div class="level-item has-text-centered">
 			<div>
-				<p class="heading">Rank</p>
-				<p class="title">#0</p>
-			</div>
-			</div>
-			<div class="level-item has-text-centered">
-			<div>
 				<p class="heading">Wins</p>
 				<p class="title" v-if="userObj">{{userObj.wins || 0}}</p>
 			</div>

@@ -4,18 +4,22 @@ const mongoose = require('mongoose');
 
 module.exports = (io, socket, username) => {
 
-	socket.join('profile#' + socket.id);
+	//socket.join('profile#' + socket.id);
 
-	//setInterval(()=>{}, 500000);
-
+	//Run immediately for first time
 	crud.retrieveProfile(username, (err, doc) => {
-		io.to('profile#' + socket.id).emit('refreshStats', doc);
-		console.log(doc);
+			socket.emit('refreshProfileStats', doc);
 	});
-	
 
-	//io.to('profile#' + socket.id).emit('refreshStats');
+	//Update every 30 seconds
+	setInterval(()=>{
+		crud.retrieveProfile(username, (err, doc) => {
+			socket.emit('refreshProfileStats', doc);
+		});
+	}, 30000);
 
-
+	crud.retrieveLeaderboard((err,doc) => {
+		socket.emit('refreshLeaderBoard', doc);
+	});
 
 }

@@ -37,9 +37,22 @@ function retrieveProfile(username, callback) {
 	});
 }
 
+function retrieveLeaderboard(callback){
+		User.find({$or: [
+			{wins: {$gt: 0}}, {losses: {$gt: 0}}
+			]})
+			.sort({wins: -1}).exec((err, doc) => {
+			if(err){
+				console.log(err);
+			}
+			callback(null, doc);
+		});
+}
+
 module.exports = {
 	updateWinsLosses,
-	retrieveProfile
+	retrieveProfile,
+	retrieveLeaderboard
 }
 
 

@@ -10,7 +10,7 @@
 				<a @click="onClick(1)" :class="{'is-active': chatBool}" class="nav-item is-tab">Chatroom</a>
 				<a @click="onClick(2)" :class="{'is-active': coinBool}" class="nav-item is-tab">CoinFlip</a>
 				<a @click="onClick(3)" :class="{'is-active': rpsBool}" class="nav-item is-tab">RPS</a>
-				<a @click="onClick(4)" :class="{'is-active': profileBool}" class="nav-item is-tab">Profile</a>
+			<!--	<a @click="onClick(4)" :class="{'is-active': profileBool}" class="nav-item is-tab">Profile</a> -->
 				<a @click="onClick(5)" :class="{'is-active': leaderBool}" class="nav-item is-tab">Leaderboard</a>
 			</div>
 
@@ -30,7 +30,7 @@
 				chatBool: false,
 				coinBool: false,
 				rpsBool: false,
-				profileBool: false,
+				//profileBool: false,
 				leaderBool: false
 			}
 		},
@@ -40,7 +40,7 @@
 					this.chatBool = true;
 					this.coinBool = false;
 					this.rpsBool = false;
-					this.profileBool = false;
+					//this.profileBool = false;
 					this.leaderBool = false;
 					this.$emit('selected', 'chatroom');
 				}
@@ -48,7 +48,7 @@
 					this.chatBool = false;
 					this.coinBool = true;
 					this.rpsBool = false;
-					this.profileBool = false;
+					//this.profileBool = false;
 					this.leaderBool = false;
 					this.$emit('selected', 'coinflip');
 				}
@@ -56,7 +56,7 @@
 					this.chatBool = false;
 					this.coinBool = false;
 					this.rpsBool = true;
-					this.profileBool = false;
+					//this.profileBool = false;
 					this.leaderBool = false;
 					this.$emit('selected', 'rps');
 				}
@@ -64,7 +64,7 @@
 					this.chatBool = false;
 					this.coinBool = false;
 					this.rpsBool = false;
-					this.profileBool = true;
+					//this.profileBool = true;
 					this.leaderBool = false;
 					this.$emit('selected', 'profile');
 				}
@@ -72,7 +72,7 @@
 					this.chatBool = false;
 					this.coinBool = false;
 					this.rpsBool = false;
-					this.profileBool = false;
+					//this.profileBool = false;
 					this.leaderBool = true;
 					this.$emit('selected', 'leaderboard');
 				}

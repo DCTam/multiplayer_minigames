@@ -7,8 +7,9 @@ const userSchema = mongoose.Schema({
 
 	username: String,
 	password: String,
-	wins: Number,
-	losses: Number
+	wins: {type: Number, default: 0},
+	losses: {type: Number, default: 0},
+	ties: {type: Number, default: 0}
     
 });
 
