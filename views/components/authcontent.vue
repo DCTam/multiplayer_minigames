@@ -14,7 +14,9 @@
 		</p>
 
 		<h1>Leaderboard</h1>
-		<p>View your own personal game statistics on RPS and see how you compare to others! <br>
+		<p>View your own personal game statistics on RPS and see how you compare to others! <br> 
+		NOTE: The ranking is based on # of wins
+		</p>
 
 	</div>
 </template>

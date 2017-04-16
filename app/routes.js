@@ -4,7 +4,7 @@ const styleArr = [
 	{style: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', type: 'text/css', rel: 'stylesheet'}
 ]
 
-module.exports = (app, passport, router) => {
+module.exports = (passport, router) => {
 	
 	router.get('/', (req, res) => {
 		let vueData = {
@@ -90,6 +90,10 @@ module.exports = (app, passport, router) => {
 		req.session.destroy((err) => {
     		res.redirect('/');
   		});
+	});
+
+	router.get('*', (req,res) => {
+		res.status(404).end('Error: Page not found');
 	});
 
 	return router;
