@@ -15,7 +15,7 @@ module.exports = (app, passport, router) => {
 					title: 'RPS Hub',
 					meta: styleArr
 				},
-				components: ['topnav']
+				components: ['topnav','homepage']
 			}
 		};
 		res.render('index', vueData);

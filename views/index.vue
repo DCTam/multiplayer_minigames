@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<topnav :buttons='buttons'></topnav>
-		Home Page <br>
+		<homepage></homepage>
 	</div>
 </template>
 
