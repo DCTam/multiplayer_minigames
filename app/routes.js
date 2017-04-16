@@ -79,7 +79,7 @@ module.exports = (app, passport, router) => {
 					{script: 'https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js'}
 					]
 				},
-				components: ['authnav', 'chatroom', 'rps', 'profile', 'coinflip', 'leaderboard']
+				components: ['authnav', 'authcontent', 'chatroom', 'rps', 'profile', 'coinflip', 'leaderboard']
 			}
 		};
 

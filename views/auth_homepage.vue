@@ -4,6 +4,7 @@
 		<keep-alive>
 			<component :username="username" :is="selectedComponent"></component>
 		</keep-alive>
+		<authcontent v-if="!selectedComponent"></authcontent>
 	</div>
 </template>
 

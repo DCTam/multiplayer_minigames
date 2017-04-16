@@ -5,7 +5,7 @@
 				<h1>Welcome to RPS Hub</h1>
 				<p> Where you can compete against others in rock, paper and scissors!</p>
 				<hr>
-				<p>Please sign up or log in to access the games</p>
+				<p>Please log in or sign up to access the games</p>
 				<div class="block">
 					<a class="button is-success" href="/signin">Log In</a>
 					<a class="button is-success" href="/signup">Sign Up</a>
@@ -15,7 +15,7 @@
 	
 		<article class="message">
 			<div class="message-header">
-				<p>Todo Backlog</p>
+				<p>To-do Backlog</p>
 			</div>
 			<div class="message-body">
 				<p>1) Create API to access player's game statistics</p>
