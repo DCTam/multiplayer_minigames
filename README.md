@@ -1,8 +1,11 @@
+## Link
+www.rps-hub.com
+
 ## About
 A Single Page Application made using Node, Express, Vue and MongoDB.
 
 Personal project made to mimic an old casual multiplayer game website that was shut down called OMGPOP.<br>
-Allows users to chat, play minigames, and compete for ranking.
+Once logged in, users will be able to chat, play minigames, and compete for ranking.
 
 ## Game Modes
 As of now, there are only two games:<br>
