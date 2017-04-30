@@ -6,6 +6,10 @@ const styleArr = [
 
 module.exports = (passport, router) => {
 	
+	//For API routing
+	const api = require('./api.js')(router);
+	router.use('/api', api);
+
 	router.get('/', (req, res) => {
 		let vueData = {
 			data: {
@@ -20,6 +24,9 @@ module.exports = (passport, router) => {
 		};
 		res.render('index', vueData);
 	});
+
+	// const api = require('./api.js')(router);
+	// router.use('/api', api);
 
 	router.get('/signin', (req, res) => {
 		let vueData = {

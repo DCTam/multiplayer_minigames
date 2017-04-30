@@ -1,20 +1,29 @@
+const crud = require('./mongo/crud.js');
+
 module.exports = (router) => {
 
-	router.get('/', (req, res) => {
-		res.send("API calls here soon");
+	router.get('/api', (req, res) => {
+		res.end("Retreiving player statistics: \nCall '/api/{username}' replacing username \nadd '?pretty=true' at end of API call to prettify JSON result");
 	});
 
-	router.get('/:username', (req, res) => {
+	router.get('/api/:username', (req, res) => {
 
-		res.setHeader('Content-Type', 'application/json'); //Set Header
+		const userToCheck = crud.retrieveProfile(req.params['username'], (err, doc) => {
 
-		//Check if pretty is requested as query parameter
-		if(req.query.pretty == 'true'){
-			res.send(JSON.stringify({ a: req.params['username'], pretty: req.query['pretty']}, null, '\t'));
-		}
-    	else {
-			res.send(JSON.stringify({ a: req.params['username']}));
-		}
+			if(doc){
+				res.setHeader('Content-Type', 'application/json'); //Set Header
+
+				if(req.query.pretty == 'true'){
+					res.send(JSON.stringify(doc, null, '\t'));
+				}
+				else {
+					res.send(doc);
+				}
+			}
+			else {
+				res.send('User not found')
+			}
+		});
 	});
 
 	return router;

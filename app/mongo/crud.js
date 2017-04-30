@@ -45,7 +45,7 @@ function updateWinsLosses(winner,loser, isTie){
 
 function retrieveProfile(username, callback) {
 
-	User.find({username: username}, {wins: 1, losses: 1, ties: 1}, (err, doc) => {
+	User.find({username: username}, {_id: 0, username: 1, wins: 1, losses: 1, ties: 1}, (err, doc) => {
 		//Return error if any
 		if(err){
 			console.log(err);

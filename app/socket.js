@@ -18,7 +18,6 @@ module.exports = (io) => {
 		});
 
 		//Called when user clicks on Profile component
-
 		socket.on('joinProfile', (username) => {
 			require('./socket_components/profile_socket.js')(io, socket, username);
 		});

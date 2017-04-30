@@ -141,7 +141,7 @@ module.exports = (io, socket) => {
 			roomsRPS[roomObj.roomId].player1Choice = null;
 			roomsRPS[roomObj.roomId].player2Choice = null;
 
-			isTie ? crud.updateWinsLosses(roomsRPS[roomObj.roomId].player1, roomsRPS[roomObj.roomId].player2, true) :crud.updateWinsLosses(winner, loser, false);
+			isTie ? crud.updateWinsLosses(roomsRPS[roomObj.roomId].player1, roomsRPS[roomObj.roomId].player2, true) : crud.updateWinsLosses(winner, loser, false);
 		}
 	});
 
