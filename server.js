@@ -46,8 +46,11 @@ app.set('vue', {
 });
 
 //Routes
+const api = require('./app/api.js')(router);
+app.use('/api', api);
 const routes = require('./app/routes.js')(passport, router);
 app.use('/', routes);
+
 
 //Socket.io
 require('./app/socket.js')(io);
