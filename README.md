@@ -14,5 +14,5 @@ As of now, there are only two games:<br>
 
 ## Features
 1) Leaderboard that shows the top players based on wins<br>
-2) API that returns player's game statistics (To-Do)<br>
+2) Public API that returns player's game statistics<br>
 3) Bot that plays with the user if no other players are online (To-do)
