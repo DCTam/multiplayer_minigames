@@ -12,14 +12,25 @@
 				</div>
 			</div>
 		</div>
+
+
+		<article class="message is-primary">
+			<div class="message-header">
+				<p>New Public API</p>
+			</div>
+			<div class="message-body">
+				<p>Currently only gives player's statistics in JSON format</p>
+				<a href="/api">Click here to use!</a>
+			</div>
+		</article>
 	
 		<article class="message">
 			<div class="message-header">
 				<p>To-do Backlog</p>
 			</div>
 			<div class="message-body">
-				<p>1) Create API to access player's game statistics</p>
-				<p>2) Bot to play against when noone is on</p>
+				<p>1) Create API to access player's game statistics (DONE)</p>
+				<p>2) Bot to play against when no one is on</p>
 				<p>3) Polish UI and add animations</p>
 			</div>
 		</article>
